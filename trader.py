@@ -11,7 +11,6 @@ class Trader:
 
     def trade(self, price_history):
         if len(price_history) < 2:
-            logging.info('First watch complete')
             return
 
         for pair, last_price in price_history[-1].items():
