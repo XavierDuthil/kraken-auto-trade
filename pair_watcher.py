@@ -5,7 +5,7 @@ import configurations
 
 
 class PairWatcher:
-    price_history = []
+    price_history = defaultdict(list)
 
     def __init__(self, pairs, api):
         if not pairs:
@@ -15,9 +15,8 @@ class PairWatcher:
         self.api = api
 
     def watch(self):
-        price_by_pair = self.get_market_averaged_price(configurations.averaged_price_time_span_in_seconds)
-        self.price_history.append(price_by_pair)
-        self.price_history = self.price_history[:configurations.maximum_elements_in_price_history]
+        last_price_by_pair = self.get_market_averaged_price(configurations.averaged_price_time_span_in_seconds)
+        self.add_to_price_history(last_price_by_pair)
 
     def get_market_averaged_price(self, time_span_in_seconds):
         last_prices_by_pair = defaultdict(list)
@@ -35,6 +34,11 @@ class PairWatcher:
         for key, value in data['result'].items():
             last_price_by_pair[key] = float(value['c'][0])
         return last_price_by_pair
+
+    def add_to_price_history(self, last_price_by_pair):
+        for pair, last_price in last_price_by_pair.items():
+            self.price_history[pair] = self.price_history[pair][:configurations.maximum_elements_in_price_history]
+            self.price_history[pair].append(last_price)
 
 
 def get_average_price_by_pair(last_prices_by_pair):

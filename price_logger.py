@@ -14,7 +14,16 @@ class PriceLogger:
         if not self.price_history or datetime.now() < self.next_log_time:
             return
 
-        last_prices = self.price_history[-1]
-        logging.info(f'Prices: {last_prices}')
+        log_message = ''
+
+        for pair, prices in self.price_history.items():
+            last_price = prices[-1]
+            if last_price >= 10:
+                log_message += pair + f': {last_price:.2f}, '
+            else:
+                log_message += pair + f': {last_price:.4f}, '
+
+        log_message = log_message[:-2]
+        logging.info(log_message)
 
         self.next_log_time = self.next_log_time + timedelta(minutes=price_logging_period_in_minutes)
