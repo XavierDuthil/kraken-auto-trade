@@ -21,6 +21,10 @@ class Trader:
 
         diff_message = ''
         for anteriority, difference in get_differences_by_anteriorities(prices).items():
+            # Ignore if the difference is too little
+            if abs(difference) < configurations.minimum_interesting_difference_in_percentage:
+                continue
+
             difference_str = get_printable_difference(difference)
             diff_message += f'\n    Over {anteriority} minute(s): {difference_str}'
 
