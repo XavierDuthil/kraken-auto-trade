@@ -17,6 +17,7 @@ class PairWatcher:
     def watch(self):
         price_by_pair = self.get_market_averaged_price(configurations.averaged_price_time_span_in_seconds)
         self.price_history.append(price_by_pair)
+        self.price_history = self.price_history[:configurations.maximum_elements_in_price_history]
 
     def get_market_averaged_price(self, time_span_in_seconds):
         last_prices_by_pair = defaultdict(list)
