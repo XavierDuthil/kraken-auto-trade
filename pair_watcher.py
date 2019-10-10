@@ -14,6 +14,13 @@ class PairWatcher:
         self.pairs_str = ','.join(pairs)
         self.api = api
 
+    def get_price_history(self):
+        for pair in self.pairs:
+            data = self.api.query_public('Trades', {'pair': pair})
+            for measure in data["result"][pair]:
+                price = float(measure[0])
+                self.price_history[pair].append(price)
+
     def watch(self):
         last_price_by_pair = self.get_market_averaged_price(configurations.averaged_price_time_span_in_seconds)
         self.add_to_price_history(last_price_by_pair)

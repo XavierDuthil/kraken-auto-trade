@@ -17,14 +17,18 @@ coloredlogs.install(
 
 if __name__ == '__main__':
     logging.info('Initializing')
+    logging.info(f"Pairs to watch: {pairs_to_watch}")
 
     api = krakenex.API()
     pair_watcher = PairWatcher(pairs_to_watch, api)
     price_logger = PriceLogger(pair_watcher.price_history)
     trader = Trader(pair_watcher.price_history)
 
-    logging.info(f'Starting watch for pairs {pairs_to_watch}')
+    logging.info(f"Fetching price history")
+    pair_watcher.get_price_history()
+
+    logging.info(f'Starting watch')
     while True:
-        pair_watcher.watch()
         price_logger.log_price()
         trader.auto_trade()
+        pair_watcher.watch()
