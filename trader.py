@@ -13,6 +13,7 @@ class Trader:
     def auto_trade(self):
         for pair in self.price_history:
             self.auto_trade_pair(pair)
+        logging.info("=================================")
 
     def auto_trade_pair(self, pair):
         prices = self.price_history[pair]
