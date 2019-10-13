@@ -9,7 +9,7 @@ class PairWatcher:
 
     def __init__(self, pairs, api):
         if not pairs:
-            raise ValueError("invalid argument: pairs cannot be empty")
+            raise ValueError('invalid argument: pairs cannot be empty')
         self.pairs = pairs
         self.pairs_str = ','.join(pairs)
         self.api = api
@@ -17,7 +17,7 @@ class PairWatcher:
     def get_price_history(self):
         for pair in self.pairs:
             data = self.api.query_public('Trades', {'pair': pair})
-            for measure in data["result"][pair]:
+            for measure in data['result'][pair]:
                 price = float(measure[0])
                 self.price_history[pair].append(price)
 

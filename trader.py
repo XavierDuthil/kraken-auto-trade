@@ -13,7 +13,7 @@ class Trader:
     def auto_trade(self):
         for pair in self.price_history:
             self.auto_trade_pair(pair)
-        logging.info("=================================")
+        logging.info('=================================')
 
     def auto_trade_pair(self, pair):
         prices = self.price_history[pair]
@@ -78,4 +78,4 @@ def calculate_difference(old_price, new_price):
 
 
 def get_printable_difference(difference):
-    return utils.get_colored_value(difference, suffix="%")
+    return utils.get_colored_value(difference, suffix='%')
