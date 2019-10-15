@@ -1,3 +1,4 @@
+import logging
 import time
 from collections import defaultdict
 
@@ -29,9 +30,13 @@ class PairWatcher:
         last_prices_by_pair = defaultdict(list)
         end_of_minute = time.time() + time_span_in_seconds
         while time.time() < end_of_minute:
-            for pair, price in self.get_market_price().items():
-                last_prices_by_pair[pair].append(price)
-            time.sleep(configurations.ticker_delay_in_seconds)
+            try:
+                for pair, price in self.get_market_price().items():
+                    last_prices_by_pair[pair].append(price)
+            except Exception as e:
+                logging.error(f'get_market_averaged_price: an error occurred: {e}')
+            finally:
+                time.sleep(configurations.ticker_delay_in_seconds)
 
         return get_average_price_by_pair(last_prices_by_pair)
 

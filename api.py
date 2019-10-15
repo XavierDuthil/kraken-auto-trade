@@ -34,6 +34,9 @@ if __name__ == '__main__':
 
     logging.info(f'Starting watch')
     while True:
-        price_logger.log_price()
-        trader.auto_trade()
-        pair_watcher.watch()
+        try:
+            price_logger.log_price()
+            trader.auto_trade()
+            pair_watcher.watch()
+        except Exception as e:
+            logging.error(f'main: an error occurred: {e}')
