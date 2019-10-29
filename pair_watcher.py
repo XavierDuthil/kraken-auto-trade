@@ -49,7 +49,7 @@ class PairWatcher:
 
     def add_to_price_history(self, last_price_by_pair):
         for pair, last_price in last_price_by_pair.items():
-            self.price_history[pair] = self.price_history[pair][:configurations.maximum_elements_in_price_history]
+            self.price_history[pair] = self.price_history[pair][-configurations.maximum_elements_in_price_history:]
             self.price_history[pair].append(last_price)
 
 
