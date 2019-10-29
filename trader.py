@@ -21,7 +21,8 @@ class Trader:
             return
 
         diff_message = ''
-        for anteriority, difference in get_differences_by_anteriorities(prices).items():
+        differences_by_anteriorities = get_differences_by_anteriorities(prices)
+        for anteriority, difference in differences_by_anteriorities.items():
             # Ignore if the difference is too little
             if abs(difference) < configurations.minimum_interesting_difference_in_percentage:
                 continue
@@ -33,9 +34,25 @@ class Trader:
             if anteriority != 10:
                 continue
             if difference > 0:
-                self.sell(pair)
+                # Sell only if diff 30min, 60min, 360min, 1440min are all positive
+                # and price is starting to go down
+                if (
+                    30 in differences_by_anteriorities and differences_by_anteriorities[30] > 0 and
+                    60 in differences_by_anteriorities and differences_by_anteriorities[60] > 0 and
+                    360 in differences_by_anteriorities and differences_by_anteriorities[360] > 0 and
+                    1440 in differences_by_anteriorities and differences_by_anteriorities[1440] > 0 > differences_by_anteriorities[1]
+                ):
+                    self.sell(pair)
             else:
-                self.buy(pair)
+                # Buy only if diff 30min, 60min, 360min, 1440min are all negative
+                # and price is starting to go up
+                if (
+                    30 in differences_by_anteriorities and differences_by_anteriorities[30] < 0 and
+                    60 in differences_by_anteriorities and differences_by_anteriorities[60] < 0 and
+                    360 in differences_by_anteriorities and differences_by_anteriorities[360] < 0 and
+                    1440 in differences_by_anteriorities and differences_by_anteriorities[1440] < 0 < differences_by_anteriorities[1]
+                ):
+                    self.buy(pair)
 
         if diff_message:
             logging.info(f'{pair}:')
