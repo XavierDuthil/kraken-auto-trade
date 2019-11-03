@@ -6,6 +6,9 @@ import utils
 
 Buy, Sell = range(0, 2)
 
+logger = logging.getLogger('ledger')
+logger.addHandler(logging.FileHandler('log/ledger.log', 'w'))
+
 
 class Operation:
     def __init__(self, pair, amount, price, kind):
@@ -52,8 +55,8 @@ class Ledger:
                 fiat_diff += operation.real_price
 
         total_return = crypto_diff * last_known_price + fiat_diff
-        logging.info(f'{self.pair} crypto diff: {utils.get_colored_value(crypto_diff)}')
-        logging.info(f'{self.pair} fiat diff: {utils.get_colored_value(fiat_diff, suffix="€")}')
-        logging.info(f'{self.pair} total fees: {total_fees}€')
-        logging.info(f'{self.pair} => total return: {utils.get_colored_value(total_return, suffix="€")}')
+        logger.info(f'{self.pair} crypto diff: {utils.get_colored_value(crypto_diff)}')
+        logger.info(f'{self.pair} fiat diff: {utils.get_colored_value(fiat_diff, suffix="€")}')
+        logger.info(f'{self.pair} total fees: {total_fees}€')
+        logger.info(f'{self.pair} => total return: {utils.get_colored_value(total_return, suffix="€")}')
         return total_return

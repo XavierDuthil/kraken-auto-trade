@@ -3,6 +3,9 @@ import logging
 import configurations
 import utils
 
+logger = logging.getLogger('trader')
+logger.addHandler(logging.FileHandler('log/trader.log', 'w'))
+
 
 class Trader:
     def __init__(self, price_history, ledgers_by_pair):
@@ -13,7 +16,7 @@ class Trader:
     def auto_trade(self):
         for pair in self.price_history:
             self.auto_trade_pair(pair)
-        logging.info('=================================')
+        logger.info('=================================')
 
     def auto_trade_pair(self, pair):
         prices = self.price_history[pair]
@@ -55,21 +58,21 @@ class Trader:
                     self.buy(pair)
 
         if diff_message:
-            logging.info(f'{pair}:')
+            logger.info(f'{pair}:')
             for line in diff_message.split('\n')[1:]:
-                logging.info(line)
+                logger.info(line)
 
     def buy(self, pair):
         last_known_price = self.price_history[pair][-1]
         buy_amount = configurations.base_trade_amount_in_euros / last_known_price
-        logging.info(f'Buying {buy_amount} {pair} at {last_known_price}')
+        logger.info(f'Buying {buy_amount} {pair} at {last_known_price}')
         self.ledgers_by_pair[pair].add_buy(buy_amount, configurations.base_trade_amount_in_euros)
         self.ledgers_by_pair[pair].calculate_return(last_known_price)
 
     def sell(self, pair):
         last_known_price = self.price_history[pair][-1]
         sell_amount = configurations.base_trade_amount_in_euros / last_known_price
-        logging.info(f'Selling {sell_amount} {pair} at {last_known_price}')
+        logger.info(f'Selling {sell_amount} {pair} at {last_known_price}')
         self.ledgers_by_pair[pair].add_sell(sell_amount, configurations.base_trade_amount_in_euros)
         self.ledgers_by_pair[pair].calculate_return(last_known_price)
 

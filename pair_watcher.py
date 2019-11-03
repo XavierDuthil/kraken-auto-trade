@@ -4,6 +4,9 @@ from collections import defaultdict
 
 import configurations
 
+logger = logging.getLogger('watcher')
+logger.addHandler(logging.FileHandler('log/watcher.log', 'w'))
+
 
 class PairWatcher:
     price_history = defaultdict(list)
@@ -34,7 +37,7 @@ class PairWatcher:
                 for pair, price in self.get_market_price().items():
                     last_prices_by_pair[pair].append(price)
             except Exception as e:
-                logging.error(f'get_market_averaged_price: an error occurred: {e}')
+                logger.error(f'get_market_averaged_price: an error occurred: {e}')
             finally:
                 time.sleep(configurations.ticker_delay_in_seconds)
 

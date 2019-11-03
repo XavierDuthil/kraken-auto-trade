@@ -4,17 +4,27 @@ import sys
 import coloredlogs
 import krakenex
 
-import ledger
 from configurations import pairs_to_watch
+from ledger import Ledger
 from pair_watcher import PairWatcher
 from price_logger import PriceLogger
 from trader import Trader
 
-coloredlogs.install(
-    fmt='%(asctime)s %(levelname)s %(message)s',
-    stream=sys.stdout,
-    level=logging.INFO,
+asctime_colored = coloredlogs.ansi_wrap('%(asctime)-19s', color='green')
+name_colored = coloredlogs.ansi_wrap('%(name)-7s', color='blue')
+levelname_colored = coloredlogs.ansi_wrap('%(levelname)-8s', color='black')
+
+logging._defaultFormatter = logging.Formatter(
+    fmt=f'{asctime_colored} {name_colored} {levelname_colored} %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S',
 )
+logging.basicConfig(
+    level=logging.INFO,
+    format=f'{asctime_colored} {name_colored} {levelname_colored} %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S',
+    handlers=[logging.StreamHandler(sys.stdout), logging.FileHandler('log/main.log', 'w')]
+)
+
 
 if __name__ == '__main__':
     logging.info('Initializing')
@@ -22,7 +32,7 @@ if __name__ == '__main__':
 
     ledgers_by_pair = {}
     for pair in pairs_to_watch:
-        ledgers_by_pair[pair] = ledger.Ledger(pair)
+        ledgers_by_pair[pair] = Ledger(pair)
 
     api = krakenex.API()
     pair_watcher = PairWatcher(pairs_to_watch, api)
