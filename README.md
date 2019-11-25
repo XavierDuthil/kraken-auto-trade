@@ -20,7 +20,7 @@
 ## Usage
 
 ```
-python api.py
+python main.py
 ```
 
 ## Venv commands
