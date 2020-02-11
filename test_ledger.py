@@ -82,4 +82,4 @@ class TestLedger(TestCase):
             test_ledger.operations = test_case.args['operations']
 
             got = test_ledger.calculate_return(test_case.args['last_known_price'])
-            self.assertEqual(got, test_case.expected)
+            self.assertEqual(got, test_case.expected, test_case.name)

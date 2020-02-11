@@ -23,6 +23,12 @@
 python main.py
 ```
 
+## Test
+
+```
+python -m unittest [test_file]
+```
+
 ## Venv commands
 
 - Deactivate environment: `deactivate`

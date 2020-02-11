@@ -42,5 +42,4 @@ class TestPairWatcher(TestCase):
             for last_price_by_pair in test_case.args["last_prices_by_pair"]:
                 test_pair_watcher.add_to_price_history(last_price_by_pair)
 
-            print("test_pair_watcher.price_history: {}".format(test_pair_watcher.price_history))
             self.assertEqual(test_pair_watcher.price_history, test_case.expected, test_case.name)
