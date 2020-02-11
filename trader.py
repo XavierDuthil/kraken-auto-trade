@@ -65,14 +65,14 @@ class Trader:
     def buy(self, pair):
         last_known_price = self.price_history[pair][-1]
         buy_amount = configurations.base_trade_amount_in_euros / last_known_price
-        logger.info(f'Buying {buy_amount} {pair} at {last_known_price}')
+        logger.info(f'Buying {buy_amount:.4f} {pair} at {last_known_price:.2f}€')
         self.ledgers_by_pair[pair].add_buy(buy_amount, configurations.base_trade_amount_in_euros)
         self.ledgers_by_pair[pair].calculate_return(last_known_price)
 
     def sell(self, pair):
         last_known_price = self.price_history[pair][-1]
         sell_amount = configurations.base_trade_amount_in_euros / last_known_price
-        logger.info(f'Selling {sell_amount} {pair} at {last_known_price}')
+        logger.info(f'Selling {sell_amount:.4f} {pair} at {last_known_price:.2f}€')
         self.ledgers_by_pair[pair].add_sell(sell_amount, configurations.base_trade_amount_in_euros)
         self.ledgers_by_pair[pair].calculate_return(last_known_price)
 

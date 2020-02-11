@@ -57,6 +57,6 @@ class Ledger:
         total_return = crypto_diff * last_known_price + fiat_diff
         logger.info(f'{self.pair} crypto diff: {utils.get_colored_value(crypto_diff)}')
         logger.info(f'{self.pair} fiat diff: {utils.get_colored_value(fiat_diff, suffix="€")}')
-        logger.info(f'{self.pair} total fees: {total_fees}€')
+        logger.info(f'{self.pair} total fees: {total_fees:.2f}€')
         logger.info(f'{self.pair} => total return: {utils.get_colored_value(total_return, suffix="€")}')
         return total_return
