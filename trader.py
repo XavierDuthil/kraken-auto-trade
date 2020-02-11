@@ -36,7 +36,7 @@ class Trader:
             # Trade only if difference is over an anteriority of 10 minutes
             if anteriority != 10:
                 continue
-            if difference > 0:
+            if difference < 0:
                 # Sell only if diff 30min, 60min, 360min, 1440min are all positive
                 # and price is starting to go down
                 if (
