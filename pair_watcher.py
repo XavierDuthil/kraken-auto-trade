@@ -10,6 +10,7 @@ logger.addHandler(logging.FileHandler('log/watcher.log', 'w'))
 
 class PairWatcher:
     price_history = defaultdict(list)
+    end_of_next_time_span = time.time() + configurations.averaged_price_time_span_in_seconds
 
     def __init__(self, pairs, api):
         if not pairs:
@@ -26,13 +27,14 @@ class PairWatcher:
                 self.price_history[pair].append(price)
 
     def watch(self):
-        last_price_by_pair = self.get_market_averaged_price(configurations.averaged_price_time_span_in_seconds)
+        last_price_by_pair = self.get_market_averaged_price()
         self.add_to_price_history(last_price_by_pair)
 
-    def get_market_averaged_price(self, time_span_in_seconds):
+    def get_market_averaged_price(self):
         last_prices_by_pair = defaultdict(list)
-        end_of_minute = time.time() + time_span_in_seconds
-        while time.time() < end_of_minute:
+        end_of_time_span = self.get_end_of_time_span()
+
+        while time.time() < end_of_time_span:
             try:
                 for pair, price in self.get_market_price().items():
                     last_prices_by_pair[pair].append(price)
@@ -42,6 +44,11 @@ class PairWatcher:
                 time.sleep(configurations.ticker_delay_in_seconds)
 
         return get_average_price_by_pair(last_prices_by_pair)
+
+    def get_end_of_time_span(self):
+        end_of_time_span = self.end_of_next_time_span
+        self.end_of_next_time_span += configurations.averaged_price_time_span_in_seconds
+        return end_of_time_span
 
     def get_market_price(self):
         data = self.api.query_public('Ticker', {'pair': self.pairs_str})
