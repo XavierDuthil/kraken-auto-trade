@@ -1,6 +1,6 @@
 import os
 
-ticker_delay_in_seconds = 1
+ticker_delay_in_seconds = 4
 averaged_price_time_span_in_seconds = 60
 maximum_elements_in_price_history = 1440
 price_logging_period_in_minutes = 60
